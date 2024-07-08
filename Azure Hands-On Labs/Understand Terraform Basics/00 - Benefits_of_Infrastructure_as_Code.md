@@ -28,8 +28,12 @@ The end state of the Azure environment should look similar to the following diag
 
 > _This lab will walk you through configuring the infrastructure step by step using a manual process. After manually completing the tasks, the lab will show you how Terraform can be used to automate the creation of the same infrastructure._
 
-## Task 1: Log into the Azure Console and create a new resource group.   
+## Task 1: Log into the Azure Console and Create a new resource group in the Southeast Asia region.
 ![Create VPC](./img/create-resource-group.png)
+
+## Task 2: Create a new Vnet with default Subnet in your resource group
+![Create VPC](./img/create-vnet-01.png)
+![Create VPC](./img/create-vnet-02.png)
 
 ---
 
