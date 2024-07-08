@@ -56,14 +56,14 @@ terraform -version
 
 You should see:
 ```hcl
-Terraform v1.0.8
+Terraform v1.9.1
 ```
 
-## Task 3: Update Terraform Configuration to include EC2 instance
+## Task 3: Update Terraform Configuration to include Azure VM instance
 
 ### Step 1.3.1
 
-In the `/workstation/terraform` directory, edit the file titled `main.tf` to create an AWS EC2 instance within one of the
+In the `/workstation/terraform` directory, edit the file titled `main.tf` to create an Azure VM instance within one of the
 our public subnets.
 
 Your final `main.tf` file should look similar to this with different values:
