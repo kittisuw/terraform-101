@@ -10,7 +10,14 @@ References
 
 # Lab Instructions
 
-You have been tasked with deploying some basic infrastructure on AWS to host a proof of concept environment. The architecture needs to include both public and private subnets and span multiple Availability Zones to test failover and disaster recovery scenarios. You expect to host Internet-facing applications. Additionally, you have other applications that need to access the Internet to retrieve security and operating system updates.
+You have been tasked with deploying some basic infrastructure on Azure to host a proof of concept environment. The architecture needs to include both public and private subnets and span multiple Availability Zones to test failover and disaster recovery scenarios. You expect to host Internet-facing applications. Additionally, you have other applications that need to access the Internet to retrieve security and operating system updates.
+
+
+
+- **Task 1:** Create a new resource group in the Southeast Asia region
+- **Task 2:** Create a new VPC in your resource group
+  
+
 
 - **Task 1:** Create a new VPC in your account in the US-East-1 region
 - **Task 2:** Create public and private subnets in three different Availability Zones
