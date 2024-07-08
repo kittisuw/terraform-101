@@ -15,8 +15,8 @@ You have been tasked with deploying some basic infrastructure on Azure to host a
 
 
 - **Task 1:** Create a new resource group in the Southeast Asia region
-- **Task 2:** Create a new VPC in your resource group
-  
+- **Task 2:** Create a new Vnet with default Subnet in your resource group
+- **Task 3:** 
 
 
 - **Task 1:** Create a new VPC in your account in the US-East-1 region
