@@ -28,20 +28,8 @@ The end state of the Azure environment should look similar to the following diag
 
 > _This lab will walk you through configuring the infrastructure step by step using a manual process. After manually completing the tasks, the lab will show you how Terraform can be used to automate the creation of the same infrastructure._
 
-## Task 1: Log into the AWS Console and create a VPC.
-
-### **Step 1.1**
-
-In the VPC console, click **Create VPC**:
-
-![Create VPC](./img/obj-1-create-vpc.png)
-
-### **Step 1.2**
-
-Give the VPC a name of **demo-vpc** and set the IPv4 CIDR block to use **10.0.0.0/16**. Leave all of the other settings as default and select **Create VPC** at the bottom of the Create VPC screen.
-
-![Configure VPC](./img/obj-1-configure-vpc.png)
-
+## Task 1: Log into the Azure Console and create a new resource group.   
+![Create VPC](./img/create-resource-group.png)
 
 ---
 
