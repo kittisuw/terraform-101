@@ -18,9 +18,9 @@ You have been tasked with deploying some basic infrastructure on Azure to host a
 - **Task 2:** Create a new Vnet with default Subnet in your resource group
 - **Task 3:** Delete the vnet resource
 - **Task 4:** Prepare files and credentials for using Terraform to deploy cloud resources 
-- **Task 8:** Set credentials for Terraform deployment
-- **Task 9:** Deploy the Azure infrastructure using Terraform
-- **Task 10:** Delete the Azure resources using Terraform to clean up our Azure environment
+- **Task 5:** Set credentials for Terraform deployment
+- **Task 6:** Deploy the Azure infrastructure using Terraform
+- **Task 7:** Delete the Azure resources using Terraform to clean up our Azure environment
 
 The end state of the Azure environment should look similar to the following diagram:
 
@@ -219,7 +219,7 @@ resource "azurerm_subnet" "default" {
   name                 = "default"
   resource_group_name  = azurerm_resource_group.demo.name
   virtual_network_name = azurerm_virtual_network.demo_vnet.name
-  address_prefixes     = ["10.1.1.0/24"]
+  address_prefixes     = [var.snet_cidr]
 }
 ```
 
