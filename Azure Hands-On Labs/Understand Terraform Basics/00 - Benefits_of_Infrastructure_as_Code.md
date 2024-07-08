@@ -177,7 +177,7 @@ In the `variables.tf`, copy the following variable definitions and save the file
 ```hcl
 variable "azure_region" {
   type    = string
-  default = "us-east-1"
+  default = "Southeast Asia"
 }
 
 variable "vpc_name" {
@@ -185,9 +185,9 @@ variable "vpc_name" {
   default = "demo_vpc"
 }
 
-variable "vpc_cidr" {
+variable "vnet_cidr" {
   type    = string
-  default = "10.0.0.0/16"
+  default = "10.1.0.0/16"
 }
 ```
 
@@ -200,12 +200,12 @@ provider "azurerm" {
 
 resource "azurerm_resource_group" "demo" {
   name     = "demo"
-  location = "Southeast Asia"
+  location = var.azure_region
 }
 
 resource "azurerm_virtual_network" "demo_vnet" {
   name                = "demo-vnet"
-  address_space       = ["10.1.0.0/16"]
+  address_space       = [var.vnet_cidr]
   location            = azurerm_resource_group.demo.location
   resource_group_name = azurerm_resource_group.demo.name
 }
