@@ -16,21 +16,13 @@ You have been tasked with deploying some basic infrastructure on Azure to host a
 
 - **Task 1:** Create a new resource group in the Southeast Asia region
 - **Task 2:** Create a new Vnet with default Subnet in your resource group
-- **Task 3:** 
-
-
-- **Task 1:** Create a new VPC in your account in the US-East-1 region
-- **Task 2:** Create public and private subnets in three different Availability Zones
-- **Task 3:** Deploy an Internet Gateway and attach it to the VPC
-- **Task 4:** Provision a NAT Gateway (a single instance will do) for outbound connectivity
-- **Task 5:** Ensure that route tables are configured to properly route traffic based on the requirements
-- **Task 6:** Delete the VPC resources
-- **Task 7:** Prepare files and credentials for using Terraform to deploy cloud resources
+- **Task 3:** Delete the vnet resource
+- **Task 4:** Prepare files and credentials for using Terraform to deploy cloud resources 
 - **Task 8:** Set credentials for Terraform deployment
-- **Task 9:** Deploy the AWS infrastructure using Terraform
-- **Task 10:** Delete the AWS resources using Terraform to clean up our AWS environment
+- **Task 9:** Deploy the Azure infrastructure using Terraform
+- **Task 10:** Delete the Azure resources using Terraform to clean up our Azure environment
 
-The end state of the AWS environment should look similar to the following diagram:
+The end state of the Azure environment should look similar to the following diagram:
 
 ![Desired Infrastructure](./img/obj-1-desired-infrastructure.png)
 
@@ -183,7 +175,7 @@ On your workstation, navigate to the `/workstation/terraform` directory. This is
 In the `variables.tf`, copy the following variable definitions and save the file. Don't worry about understanding everything just yet, we'll learn all about variables in Objective 3.
 
 ```hcl
-variable "aws_region" {
+variable "azure_region" {
   type    = string
   default = "us-east-1"
 }
@@ -197,143 +189,32 @@ variable "vpc_cidr" {
   type    = string
   default = "10.0.0.0/16"
 }
-
-variable "private_subnets" {
-  default = {
-    "private_subnet_1" = 1
-    "private_subnet_2" = 2
-    "private_subnet_3" = 3
-  }
-}
-
-variable "public_subnets" {
-  default = {
-    "public_subnet_1" = 1
-    "public_subnet_2" = 2
-    "public_subnet_3" = 3
-  }
-}
 ```
 
 In the `main.tf` file, copy the following Terraform configuration and save the file.
 
 ```hcl
-# Configure the AWS Provider
-provider "aws" {
-  region = "us-east-1"
+provider "azurerm" {
+  features {}
 }
 
-#Retrieve the list of AZs in the current AWS region
-data "aws_availability_zones" "available" {}
-data "aws_region" "current" {}
-
-#Define the VPC
-resource "aws_vpc" "vpc" {
-  cidr_block = var.vpc_cidr
-
-  tags = {
-    Name        = var.vpc_name
-    Environment = "demo_environment"
-    Terraform   = "true"
-  }
+resource "azurerm_resource_group" "demo" {
+  name     = "demo"
+  location = "Southeast Asia"
 }
 
-#Deploy the private subnets
-resource "aws_subnet" "private_subnets" {
-  for_each          = var.private_subnets
-  vpc_id            = aws_vpc.vpc.id
-  cidr_block        = cidrsubnet(var.vpc_cidr, 8, each.value)
-  availability_zone = tolist(data.aws_availability_zones.available.names)[each.value]
-
-  tags = {
-    Name      = each.key
-    Terraform = "true"
-  }
+resource "azurerm_virtual_network" "demo_vnet" {
+  name                = "demo-vnet"
+  address_space       = ["10.1.0.0/16"]
+  location            = azurerm_resource_group.demo.location
+  resource_group_name = azurerm_resource_group.demo.name
 }
 
-#Deploy the public subnets
-resource "aws_subnet" "public_subnets" {
-  for_each                = var.public_subnets
-  vpc_id                  = aws_vpc.vpc.id
-  cidr_block              = cidrsubnet(var.vpc_cidr, 8, each.value + 100)
-  availability_zone       = tolist(data.aws_availability_zones.available.names)[each.value]
-  map_public_ip_on_launch = true
-
-  tags = {
-    Name      = each.key
-    Terraform = "true"
-  }
-}
-
-#Create route tables for public and private subnets
-resource "aws_route_table" "public_route_table" {
-  vpc_id = aws_vpc.vpc.id
-
-  route {
-    cidr_block     = "0.0.0.0/0"
-    gateway_id     = aws_internet_gateway.internet_gateway.id
-    #nat_gateway_id = aws_nat_gateway.nat_gateway.id
-  }
-  tags = {
-    Name      = "demo_public_rtb"
-    Terraform = "true"
-  }
-}
-
-resource "aws_route_table" "private_route_table" {
-  vpc_id = aws_vpc.vpc.id
-
-  route {
-    cidr_block     = "0.0.0.0/0"
-    # gateway_id     = aws_internet_gateway.internet_gateway.id
-    nat_gateway_id = aws_nat_gateway.nat_gateway.id
-  }
-  tags = {
-    Name      = "demo_private_rtb"
-    Terraform = "true"
-  }
-}
-
-#Create route table associations
-resource "aws_route_table_association" "public" {
-  depends_on     = [aws_subnet.public_subnets]
-  route_table_id = aws_route_table.public_route_table.id
-  for_each       = aws_subnet.public_subnets
-  subnet_id      = each.value.id
-}
-
-resource "aws_route_table_association" "private" {
-  depends_on     = [aws_subnet.private_subnets]
-  route_table_id = aws_route_table.private_route_table.id
-  for_each       = aws_subnet.private_subnets
-  subnet_id      = each.value.id
-}
-
-#Create Internet Gateway
-resource "aws_internet_gateway" "internet_gateway" {
-  vpc_id = aws_vpc.vpc.id
-  tags = {
-    Name = "demo_igw"
-  }
-}
-
-#Create EIP for NAT Gateway
-resource "aws_eip" "nat_gateway_eip" {
-  domain     = "vpc"
-  depends_on = [aws_internet_gateway.internet_gateway]
-  tags = {
-    Name = "demo_igw_eip"
-  }
-}
-
-#Create NAT Gateway
-resource "aws_nat_gateway" "nat_gateway" {
-  depends_on    = [aws_subnet.public_subnets]
-  allocation_id = aws_eip.nat_gateway_eip.id
-  subnet_id     = aws_subnet.public_subnets["public_subnet_1"].id
-  tags = {
-    Name = "demo_nat_gateway"
-  }
+resource "azurerm_subnet" "default" {
+  name                 = "default"
+  resource_group_name  = azurerm_resource_group.demo.name
+  virtual_network_name = azurerm_virtual_network.demo_vnet.name
+  address_prefixes     = ["10.1.1.0/24"]
 }
 ```
 
