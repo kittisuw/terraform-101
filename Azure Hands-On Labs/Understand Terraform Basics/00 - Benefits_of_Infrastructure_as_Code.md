@@ -49,17 +49,17 @@ Well, as much fun as that was, it's time to delete all of the resources that we 
 
 As you are deleting resources, note that manually deleting resources is sometimes risky, especially on a public cloud where forgotten resources could rack up a large bill. Additionally, leaving behind technical debt can impact future deployments and cause confusion when deploying future workloads.
 
-## Task 6: Delete the VPC resources.
+## Task 3: Delete the VPC resources.
 
-### **Step 6.1**
+### **Step 3.1**
 
 Prior to deleting the VPC, you must first delete the NAT gateway. Select NAT Gateways on the left navigation pane and delete the **_demo-nat-gateway_**. Afterwards, in the VPC Console, select the VPC that we just created by checking the tick box next to the VPC. From the Actions menu, select **_Delete VPC_**. Confirm you wish to delete the VPC and related AWS resources by typing _delete_ in the text box at the bottom of the prompt. Click the **_Delete_** button.
 
 ![Create rtb](./img/obj-1-delete-vpc.png)
 
-## Task 7: Prepare files and credentials for using Terraform to deploy cloud resources.
+## Task 4: Prepare files and credentials for using Terraform to deploy cloud resources.
 
-### **Step 7.1**
+### **Step 4.1**
 
 On your workstation, navigate to the `/workstation/terraform` directory. This is where we'll do all of our work for this training. Create a new file called `main.tf` and `variables.tf`.
 
@@ -114,15 +114,15 @@ resource "azurerm_subnet" "default" {
 }
 ```
 
-## Task 8: Set credentials for Terraform deployment
+## Task 5: Set credentials for Terraform deployment
 
-### **Step 8.1**
+### **Step 5.1**
 https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/azure_cli
 
 
-## Task 9: Deploy the AWS infrastructure using Terraform
+## Task 6: Deploy the AWS infrastructure using Terraform
 
-### **Step 9.1**
+### **Step 6.1**
 
 The first step to using Terraform is initializing the working directory. In your shell session, type the following command:
 
@@ -137,7 +137,7 @@ terraform init
 ...
 ```
 
-### **Step 9.2**
+### **Step 6.2**
 
 Now that our working directory is initialized, we can create a plan for execution. This will provide a preview of the changes to our AWS environment. To create a plan, execute the following command:
 
@@ -165,7 +165,7 @@ Resource actions are indicated with the following symbols:
 
 Notice that Terraform will create 18 resources for us in our AWS environment, which includes all of the networking components we manually created in earlier steps.
 
-### **Step 9.3**
+### **Step 6.3**
 
 For our final step to create our AWS resources, we need to apply the configuration. An apply will instruct Terraform to create the resources in AWS that are defined in our configuration file(s). And as we saw in our plan, it will create 18 resources for us. To execute the Terraform, run the following command:
 
@@ -189,9 +189,9 @@ Resource actions are indicated with the following symbols:
 
 At this point, Terraform has created new resources in our AWS account that match the requirements stated at the beginning of the lab. Feel free to log into the AWS console and browse around. You should see the new VPC, subnets, route tables, NAT Gateway, and Internet Gateway. These should look just like our configuration, but completely automated by Terraform.
 
-## Task 10: Delete the AWS resources using Terraform to clean up our AWS environment
+## Task 7: Delete the AWS resources using Terraform to clean up our AWS environment
 
-### **Step 10.1**
+### **Step 7.1**
 
 The final step is to destroy all of the resources created by Terraform. By using Terraform to destroy the resources, you will ensure that every single resource deployed with Terraform is destroyed from your account. This ensures you don't leave anything behind that could incur costs or leave behind technical debt.
 
