@@ -49,13 +49,13 @@ Well, as much fun as that was, it's time to delete all of the resources that we 
 
 As you are deleting resources, note that manually deleting resources is sometimes risky, especially on a public cloud where forgotten resources could rack up a large bill. Additionally, leaving behind technical debt can impact future deployments and cause confusion when deploying future workloads.
 
-## Task 3: Delete the VPC resources.
+## Task 3: Delete the Vnet resources.
 
 ### **Step 3.1**
 
 Prior to deleting the VPC, you must first delete the NAT gateway. Select NAT Gateways on the left navigation pane and delete the **_demo-nat-gateway_**. Afterwards, in the VPC Console, select the VPC that we just created by checking the tick box next to the VPC. From the Actions menu, select **_Delete VPC_**. Confirm you wish to delete the VPC and related AWS resources by typing _delete_ in the text box at the bottom of the prompt. Click the **_Delete_** button.
 
-![Create rtb](./img/obj-1-delete-vpc.png)
+![Create rtb](./img/delete-vnet.png)
 
 ## Task 4: Prepare files and credentials for using Terraform to deploy cloud resources.
 
